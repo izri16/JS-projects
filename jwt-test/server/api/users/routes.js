@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 
 import { db } from '../db';
-import { isUniqueEmail, isUniqueLogin } from './functions';
+import { isUniqueEmail, isUniqueLogin, getUserHash } from './functions';
 import {
   INVALID_DATA,
   OK,
@@ -12,6 +12,7 @@ import {
 } from '../responses';
 
 const CREATE_USER_ERROR = 'Could not create user';
+const WRONG_CREDS = 'Wrong login or password';
 const router = express.Router();
 
 // Token check may come here
@@ -20,11 +21,41 @@ router.use((req, res, next) => {
 });
 
 
+// Login
+router.post('/', (req, res) => {
+  const { body } = req;
+  if (!body.password || !body.login) {
+    res.status(401).send(WRONG_CREDS);
+  }
+
+  const password = body.password.trim();
+  const login = body.login.trim();
+  getUserHash(login)
+    .then((hash) => {
+      if (hash) {
+        bcrypt.compare(password, hash, (err, match) => {
+          if (match) {
+            res.status(200).send(OK);
+          } else {
+            res.status(401).send(WRONG_CREDS);
+          }
+        })
+      } else {
+        res.status(401).send(WRONG_CREDS);
+      }
+    })
+    .catch((e) => {
+      res.status(500).send(DEFAULT_MESSAGE);
+    })
+});
+
+
 // Add new user
-router.post('/new', function(req, res) {
+router.post('/new', (req, res) => {
   const { body } = req;
   if (!body.password || !body.login || !body.email) {
-    res.status(400).send('Invalid data');
+    response.message = INVALID_DATA
+    res.status(400).send(response);
   }
 
   const password = body.password.trim();
@@ -65,6 +96,9 @@ router.post('/new', function(req, res) {
         res.status(200).json(JSON.stringify(response));
         saveUser();
       }
+    })
+    .catch((e) => {
+      res.status(500).send(JSON.stringify(response));
     });
   } else {
     response.message = INVALID_DATA;
