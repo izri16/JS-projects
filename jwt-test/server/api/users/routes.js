@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 
 import { db } from '../db';
-import { isUniqueEmail, isUniqueLogin, getUserHash } from './functions';
+import { isUniqueEmail, isUniqueLogin,
+         getUserHash, getTokenData } from './functions';
 import {
   INVALID_DATA,
   OK,
@@ -34,24 +35,28 @@ router.post('/', (req, res) => {
   const password = body.password.trim();
   const login = body.login.trim();
   getUserHash(login)
-    .then((hash) => {
-      if (hash) {
+    .then((data) => {
+      if (data) {
+        const { hash, userId } = data;
         bcrypt.compare(password, hash, (err, match) => {
           if (match) {
-            response.message = OK
+            const tokenData = getTokenData(userId);
+            response.token = tokenData.token;
+            response.expires = tokenData.expires;
+            response.message = OK;
             res.status(200).json(response);
           } else {
             res.status(401).json(response);
           }
-        })
+        });
       } else {
         res.status(401).json(response);
       }
     })
-    .catch((e) => {
+    .catch(() => {
       response.message = DEFAULT_MESSAGE;
       res.status(500).json(response);
-    })
+    });
 });
 
 
@@ -64,7 +69,7 @@ router.post('/new', (req, res) => {
   };
 
   if (!body.password || !body.login || !body.email) {
-    response.message = INVALID_DATA
+    response.message = INVALID_DATA;
     res.status(400).json(response);
   }
 
@@ -103,7 +108,7 @@ router.post('/new', (req, res) => {
         saveUser();
       }
     })
-    .catch((e) => {
+    .catch(() => {
       res.status(500).send(response);
     });
   } else {

@@ -4,6 +4,9 @@ import bodyParser from 'body-parser';
 import address from 'network-address';
 import path from 'path';
 
+// check token for every request
+import auth from './auth';
+
 // routes
 import users from './users/routes';
 
@@ -13,6 +16,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(auth);
 app.set('jwtTokenSecret', '78945fewf65f8efarhtjwbnnmju89wre');
 app.set('port', port);
 
