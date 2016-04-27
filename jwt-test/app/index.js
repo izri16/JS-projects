@@ -3,9 +3,10 @@ import { render } from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
+import {Router, hashHistory} from 'react-router';
 
-import App from './containers/App';
 import loginApp from './reducers';
+import routes from './routes';
 
 
 function configureStore() {
@@ -22,6 +23,6 @@ let rootElement = document.getElementById('root');
 
 render(
   <Provider store={store}>
-    <App/>
+    <Router history={hashHistory}>{routes}</Router>
   </Provider>, rootElement
 );

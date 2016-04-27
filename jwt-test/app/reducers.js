@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 function login(state = {
   isFetching: false,
@@ -11,7 +12,8 @@ function login(state = {
 }
 
 const loginApp = combineReducers({
-  login
+  login,
+  form: formReducer
 });
 
 export default loginApp;

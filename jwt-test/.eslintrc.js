@@ -36,6 +36,7 @@ module.exports = {
         ],
         "react/jsx-uses-vars": 1,
         "react/jsx-uses-react": 1,
-        "no-console": 0
+        "no-console": 0,
+        "no-class-assign": 0
     }
 };
