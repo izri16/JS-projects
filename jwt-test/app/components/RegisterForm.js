@@ -5,8 +5,7 @@ import {
   FormControl,
   ControlLabel,
   HelpBlock,
-  Form,
-  Button
+  Form
 } from 'react-bootstrap';
 
 import validateRegisterForm from '../utils/validateRegisterForm';
@@ -21,7 +20,7 @@ class RegisterForm extends Component {
       password: '',
       passwordCheck: ''
     }, ['login', 'email', 'password', 'passwordCheck']));
-  } 
+  }
 
   render() {
     const {fields: {login, email, password, passwordCheck}, handleSubmit} = this.props;
@@ -95,8 +94,7 @@ class RegisterForm extends Component {
           }
           <FormControl.Feedback />
         </FormGroup>
-        <Button onSubmit={handleSubmit} type='submit'>fewfewf</Button>
-        <CustomButton onSubmit={handleSubmit} text={'Register'} />
+        <CustomButton onSubmit={handleSubmit} type='submit'>Register</CustomButton>
       </Form>
     );
   }

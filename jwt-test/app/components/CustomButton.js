@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button } from 'react-bootstrap';
 
-class CustomButton extends Component {
+class CustomButton extends Button { 
+
+  constructor(props) {
+    super(props);
+
+    this.type = props.type === 'submit' ? 'submit' : 'button';
+  }
+
   render() {
-    const { text } = this.props;
     return (
-      <Button style={buttonStyle}>{text}</Button>
+      <Button style={buttonStyle}
+              type={this.type}>
+        {this.props.children}
+      </Button>
     );
   }
 }
