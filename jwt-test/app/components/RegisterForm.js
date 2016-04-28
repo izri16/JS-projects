@@ -1,16 +1,27 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm, initialize } from 'redux-form';
-import {FormGroup, FormControl, ControlLabel, HelpBlock, Button} from 'react-bootstrap';
+import {
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  HelpBlock,
+  Form,
+  Button
+} from 'react-bootstrap';
 
 import validateRegisterForm from '../utils/validateRegisterForm';
+import CustomButton from './CustomButton';
 
 class RegisterForm extends Component {
 
   componentWillMount() {
     this.props.dispatch(initialize('register', {
-      name: 'test'
+      login: '',
+      email: '',
+      password: '',
+      passwordCheck: ''
     }, ['login', 'email', 'password', 'passwordCheck']));
-  }
+  } 
 
   render() {
     const {fields: {login, email, password, passwordCheck}, handleSubmit} = this.props;
@@ -18,7 +29,7 @@ class RegisterForm extends Component {
     const ERROR = 'error';
 
     return (
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <FormGroup
           controlId='registerLogin'
           validationState={login.error.message && login.touched && ERROR || 
@@ -84,8 +95,9 @@ class RegisterForm extends Component {
           }
           <FormControl.Feedback />
         </FormGroup>
-        <Button bsStyle='primary' onSubmit={handleSubmit}>Register</Button>
-      </form>
+        <Button onSubmit={handleSubmit} type='submit'>fewfewf</Button>
+        <CustomButton onSubmit={handleSubmit} text={'Register'} />
+      </Form>
     );
   }
 }
