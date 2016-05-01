@@ -1,16 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'public/template.ejs',
+      inject: 'body'
+    })
   ],
   devtool: 'eval-source-map',
   watch: true,
   entry: './app/index.js',
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: 'bundle.js'
+    filename: '[name]-[hash].js'
   },
   module: {
     loaders: [
