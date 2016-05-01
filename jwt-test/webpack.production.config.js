@@ -28,10 +28,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({minimize: true}),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new HtmlWebpackPlugin({
-        template: 'public/template.ejs',
-        inject: 'body'
+      template: 'public/template.ejs',
+      inject: 'body'
     })
   ]
 };
