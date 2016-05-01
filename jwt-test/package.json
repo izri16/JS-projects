@@ -6,7 +6,8 @@
   "scripts": {
     "eslint": "eslint .",
     "dev": "webpack-dev-server --progress",
-    "build": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress",
+    "clear-dist": "rm -r public/dist/* || true",
+    "build": "npm run clear-dist && NODE_ENV=production webpack --config ./webpack.production.config.js --progress",
     "start": "npm run build && babel-node server.js"
   },
   "author": "",
@@ -32,6 +33,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-react-hmre": "^1.1.1",
     "express": "^4.13.4",
+    "html-webpack-plugin": "^2.16.0",
     "react-transform-hmr": "^1.0.4",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",

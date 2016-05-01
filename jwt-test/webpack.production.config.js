@@ -1,12 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
   entry: './app/index.js',
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: 'bundle.js'
+    filename: 'dist/[name]-[hash].js',
+    hash: true
   },
   module: {
     loaders: [
@@ -26,6 +28,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
+    new HtmlWebpackPlugin({
+        template: 'public/template.ejs',
+        inject: 'body'
+    })
   ]
 };
