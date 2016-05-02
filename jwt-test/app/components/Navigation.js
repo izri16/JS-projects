@@ -16,7 +16,7 @@ class Navigation extends Component {
       <Navbar style={navigationStyle} inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/home'}>Musictor</Link>
+            <Link to={'/'}>Musictor</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
