@@ -3,6 +3,7 @@ import validator from 'validator';
 const NOT_EMPTY = 'Field can\'t be empty';
 
 function validateRegisterForm(data) {
+
   const errors = {
     login: {},
     email: {},

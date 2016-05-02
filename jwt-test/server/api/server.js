@@ -14,6 +14,13 @@ const env = process.env.NODE_ENV || 'development';
 const port = process.env.NODE_PORT || 8001;
 const app = express();
 
+// headers
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  next();
+});
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(auth);
@@ -23,7 +30,7 @@ app.set('port', port);
 // routes
 app.use('/users', users);
 
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 createServer(app).listen(app.get('port'), () => {
   console.info('Listening on "%s:%s" env="%s"', address(), 

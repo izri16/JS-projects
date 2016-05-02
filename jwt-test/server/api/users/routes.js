@@ -8,8 +8,7 @@ import { isUniqueEmail, isUniqueLogin,
 import {
   INVALID_DATA,
   OK,
-  DEFAULT_MESSAGE,
-  VALUE_EXISTS
+  DEFAULT_MESSAGE
 } from '../responses';
 
 const CREATE_USER_ERROR = 'Could not create user';
@@ -64,8 +63,7 @@ router.post('/', (req, res) => {
 router.post('/new', (req, res) => {
   const { body } = req;
   let response = {
-    message: DEFAULT_MESSAGE,
-    errorFields: []
+    message: DEFAULT_MESSAGE
   };
 
   if (!body.password || !body.login || !body.email) {
@@ -77,44 +75,32 @@ router.post('/new', (req, res) => {
   const email = body.email.trim();
   const login = body.login.trim();
 
-  if (!validator.isEmail(email)) {
-    response.errorFields.push('email'); 
-  }
-  if (!validator.isLength(login, {min:6, max:40})) {
-    response.errorFields.push('login');
-  }
-  if (!validator.isLength(password, {min:6, max:128})) {
-    response.errorFields.push('password');
-  }
-
-  if (!response.errorFields.length) {
-    isUniqueEmail(email)
-    .then((data) => {
-      if (!data) {
-        response.errorFields.push('email'); 
-      }
-      return isUniqueLogin(login);
-    })
-    .then((data) => {
-      if (!data) {
-        response.errorFields.push('login'); 
-      }
-      if (response.errorFields.length) {
-        response.message = VALUE_EXISTS;
-        res.status(409).json(response);
-      } else {
-        response.message = OK;
-        res.status(200).json(response);
-        saveUser();
-      }
-    })
-    .catch(() => {
-      res.status(500).send(response);
-    });
-  } else {
-    response.message = INVALID_DATA;
+  if (!validator.isEmail(email) || 
+      !validator.isLength(login, {min:6, max:40}) ||
+      !validator.isLength(password, {min:6, max:128})) {
     res.status(400).json(response);
   }
+
+  isUniqueEmail(email)
+  .then((data) => {
+    if (!data) {
+      response.message = 'Email exists';
+      res.status(409).json(response);
+    }
+    return isUniqueLogin(login);
+  })
+  .then((data) => {
+    if (!data) {
+      response.message = 'Login exists';
+      res.status(409).json(response);
+    }
+    saveUser();
+    response.message = OK;
+    res.status(200).json(response);
+  })
+  .catch(() => {
+    res.status(500).send(response);
+  });
 
   const saveUser = () => {
     const saltRounds = 10;
