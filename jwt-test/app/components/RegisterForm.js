@@ -30,8 +30,7 @@ class RegisterForm extends Component {
     return (
       <Form onSubmit={handleSubmit}>
         {
-          error && <h3 style={errorStyle}>{error}</h3> ||
-          <h4>Thank you for registration! Confirmation email was sent to your email address</h4>
+          error && <h3 style={errorStyle}>{error}</h3>
         }
         <FormGroup
           controlId='registerLogin'

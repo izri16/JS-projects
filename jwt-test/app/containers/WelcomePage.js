@@ -4,11 +4,10 @@ import { bindActionCreators } from 'redux';
 import { initialize } from 'redux-form';
 
 import Body from '../components/Body';
-import Navigation from '../components/Navigation';
 
 import { registerUser } from '../actions';
 
-class App extends Component {
+class WelcomePage extends Component {
 
   handleSubmitRegister(data) {
     console.log('Submission received!', data);
@@ -21,13 +20,12 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <Navigation />
-        <Body handleSubmitRegister={this.handleSubmitRegister.bind(this)}/>
-      </div>
+      <Body handleSubmitRegister={this.handleSubmitRegister.bind(this)}/>
     );
   }
 }
+
+
 
 const mapStateToProps = (state) => {
   return {
@@ -42,4 +40,4 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage);

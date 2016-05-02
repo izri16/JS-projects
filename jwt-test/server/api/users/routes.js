@@ -61,6 +61,7 @@ router.post('/', (req, res) => {
 
 // Add new user
 router.post('/new', (req, res) => {
+  const EXISTS = 'EXISTS';
   const { body } = req;
   let response = {
     message: DEFAULT_MESSAGE
@@ -68,7 +69,7 @@ router.post('/new', (req, res) => {
 
   if (!body.password || !body.login || !body.email) {
     response.message = INVALID_DATA;
-    res.status(400).json(response);
+    return res.status(400).json(response);
   }
 
   const password = body.password.trim();
@@ -78,46 +79,49 @@ router.post('/new', (req, res) => {
   if (!validator.isEmail(email) || 
       !validator.isLength(login, {min:6, max:40}) ||
       !validator.isLength(password, {min:6, max:128})) {
-    res.status(400).json(response);
+    return res.status(400).json(response);
   }
 
   isUniqueEmail(email)
   .then((data) => {
     if (!data) {
-      response.message = 'Email exists';
-      res.status(409).json(response);
+      throw {type: EXISTS, message: 'Email exists'};
     }
     return isUniqueLogin(login);
   })
   .then((data) => {
     if (!data) {
-      response.message = 'Login exists';
-      res.status(409).json(response);
+      throw {type: EXISTS, message: 'Login exists'};
     }
     saveUser();
     response.message = OK;
     res.status(200).json(response);
   })
-  .catch(() => {
-    res.status(500).send(response);
+  .catch((err) => {
+    if (('type' in err) && (err.type === EXISTS)) {
+      response.message = err.message;
+      res.status(409).json(response);
+    } else {
+      res.status(500).send(response);
+    }
   });
 
   const saveUser = () => {
     const saltRounds = 10;
     bcrypt.hash(password, saltRounds, function(err, hash) {
       if (err) {
-        res.status(500).json(response);
+        return res.status(500).json(response);
       }
       var query = 'INSERT INTO users(login, email, password)\
                    VALUES($1, $2, $3) RETURNING id';
       db.one(query, [login, email, hash])
         .then(() => {
           response.message = OK;
-          res.status(200).json(response);
+          return res.status(200).json(response);
         })
         .catch(() => {
           response.message = CREATE_USER_ERROR;
-          res.status(500).json(response);
+          return res.status(500).json(response);
         });
     });
   };
