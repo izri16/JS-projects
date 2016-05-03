@@ -152,3 +152,23 @@ export const logout = (router) => {
     router.push('/');
   };
 };
+
+export const getGreetings = () => {
+  let config = {
+    method: 'GET',
+    headers: {'x-access-token': localStorage.getItem('id_token')},
+    mode: 'cors'
+  };
+
+
+  return dispatch => {
+    return fetch('http://localhost:3001/greetings', config)
+      .then(response =>
+        response.json().then(res => ({ res, response })))
+      .then(({ res, response }) =>  {
+        console.info('register', res, response);
+      }).catch(err => {
+        console.info('register-error', err);
+      });
+  };
+};

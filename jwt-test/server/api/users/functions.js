@@ -32,7 +32,7 @@ export function getUserHash(email) {
       if (data.length) {
         const hash = data[0].hash;
         const id = data[0].id;
-        return {hash, id};
+        return {hash, userId: id};
       }
       return undefined;
     })
@@ -42,6 +42,7 @@ export function getUserHash(email) {
 }
 
 export function getTokenData(userId) {
+  console.log('userId', userId);
   const expires = moment().add(7, 'days').valueOf();
   const token = jwt.encode({
     iss: userId,
