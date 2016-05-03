@@ -145,9 +145,10 @@ const logoutRequest = () => {
   };
 };
 
-export const logout = () => {
+export const logout = (router) => {
   return dispatch => {
     dispatch(logoutRequest());
     localStorage.removeItem('id_token');
+    router.push('/');
   };
 };

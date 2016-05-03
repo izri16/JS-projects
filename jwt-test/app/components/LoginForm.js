@@ -5,7 +5,10 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  Button
+  Button,
+  HelpBlock,
+  Row,
+  Col
 } from 'react-bootstrap';
 
 class LoginForm extends Component {
@@ -21,10 +24,9 @@ class LoginForm extends Component {
     const {fields: {email, password}, handleSubmit, error} = this.props;
 
     return (
+      <div>
+      <Row>
       <Form onSubmit={handleSubmit} style={formStyle} inline>
-        {
-          error && <h3 style={errorStyle}>{error}</h3>
-        }
         <FormGroup controlId='emailLogin'>
           <ControlLabel style={labelStyle}>Email</ControlLabel>
           {' '}
@@ -49,6 +51,17 @@ class LoginForm extends Component {
           Login
         </Button>
       </Form>
+      </Row>
+      <Row>
+        <Col md={6}>
+        </Col>
+        <Col md={6}>
+        {
+          error && <HelpBlock style={errorStyle}>{error}</HelpBlock>
+        }
+        </Col>
+      </Row>
+      </div>
     );
   }
 }
@@ -71,7 +84,8 @@ const buttonStyle = {
 };
 
 const errorStyle = {
-  color: '#CE2323'
+  color: '#BE3131',
+  textAlign: 'right'
 };
 
 LoginForm.PropTypes = {

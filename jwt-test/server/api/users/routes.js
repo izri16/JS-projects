@@ -22,7 +22,7 @@ const authString = 'smtps://publicmailer123%40gmail.com:tajneheslo123@smtp.gmail
 const smtpTransport = nodemailer.createTransport(authString);
 
 const CREATE_USER_ERROR = 'Could not create user';
-const WRONG_CREDS = 'Wrong login or password';
+const WRONG_CREDS = 'Wrong login or password!';
 const router = express.Router();
 
 // Token check may come here

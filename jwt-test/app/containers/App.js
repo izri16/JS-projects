@@ -25,7 +25,7 @@ class App extends Component {
         <Navigation
           handleSubmitLogin={this.handleSubmitLogin.bind(this)}
           authenticated={this.props.authenticated}
-          logout={this.props.logout} />
+          logout={() => this.props.logout(this.props.history)} />
         {this.props.children}
       </div>
     );
