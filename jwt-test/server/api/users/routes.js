@@ -1,15 +1,25 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
+import nodemailer from 'nodemailer';
+import { createHash } from 'crypto';
 
 import { db } from '../db';
-import { isUniqueEmail, isUniqueLogin,
-         getUserHash, getTokenData } from './functions';
+import {
+  isUniqueEmail, isUniqueLogin,
+  getUserHash, getTokenData,
+  isCorrectRequest, confirmRegistration
+} from './functions';
 import {
   INVALID_DATA,
   OK,
-  DEFAULT_MESSAGE
+  DEFAULT_MESSAGE,
+  FORBIDDEN
 } from '../responses';
+import app from '../server';
+
+const authString = 'smtps://publicmailer123%40gmail.com:tajneheslo123@smtp.gmail.com';
+const smtpTransport = nodemailer.createTransport(authString);
 
 const CREATE_USER_ERROR = 'Could not create user';
 const WRONG_CREDS = 'Wrong login or password';
@@ -68,7 +78,7 @@ router.post('/new', (req, res) => {
   };
 
   if (!body.password || !body.login || !body.email) {
-    response.message = INVALID_DATA;
+    response.message = INVALID_DATA;  
     return res.status(400).json(response);
   }
 
@@ -79,6 +89,7 @@ router.post('/new', (req, res) => {
   if (!validator.isEmail(email) || 
       !validator.isLength(login, {min:6, max:40}) ||
       !validator.isLength(password, {min:6, max:128})) {
+    response.message = INVALID_DATA;
     return res.status(400).json(response);
   }
 
@@ -94,8 +105,6 @@ router.post('/new', (req, res) => {
       throw {type: EXISTS, message: 'Login exists'};
     }
     saveUser();
-    response.message = OK;
-    res.status(200).json(response);
   })
   .catch((err) => {
     if (('type' in err) && (err.type === EXISTS)) {
@@ -112,12 +121,21 @@ router.post('/new', (req, res) => {
       if (err) {
         return res.status(500).json(response);
       }
-      var query = 'INSERT INTO users(login, email, password)\
-                   VALUES($1, $2, $3) RETURNING id';
-      db.one(query, [login, email, hash])
+      const urlHash = createRandomHash();
+      console.log('hash', urlHash);
+      var query = 'INSERT INTO users(login, email, password, auth_hash)\
+                   VALUES($1, $2, $3, $4) RETURNING id';
+      db.one(query, [login, email, hash, urlHash])
         .then(() => {
-          response.message = OK;
-          return res.status(200).json(response);
+          sendVerificationEmail(email, urlHash, login, (emailStatus) => {
+            if (emailStatus) {
+              response.message = OK;
+              res.status(200).json(response);
+            } else {
+              response.message = 'Could not send email';
+              res.status(500).json(response);
+            }
+          });
         })
         .catch(() => {
           response.message = CREATE_USER_ERROR;
@@ -125,6 +143,62 @@ router.post('/new', (req, res) => {
         });
     });
   };
+
+  const createRandomHash = () => {
+    const current_date = (new Date()).valueOf().toString();
+    const random = Math.random().toString();
+    return createHash('sha1').update(current_date + random).digest('hex');
+  };
+
+  const sendVerificationEmail = (email, urlHash, login, fn) => {
+    const host = `localhost:${app.get('port')}`;
+    const link = `http://${host}/users/verify?email=${email}&hash=${urlHash}`;
+
+    const mailOptions={
+      to: email,
+      subject: 'Musictor registraion',
+      html : 'Thank you for registraion <strong>' + login + '</strong>!<br> \
+              Please Click on the link to verify your email.<br>\
+              <a href='+link+'>Click here to verify</a>'
+    };
+
+    smtpTransport.sendMail(mailOptions, (error, response) => {
+      if (error) {
+        console.log('Email error', error);
+      } else {
+        console.log('Email success', response);
+      }
+      fn(error ? false : true);
+    });
+  };
+});
+
+// verify login
+router.get('/verify', (req, res) => {
+  if (!req.query.hash || !req.query.email) {
+    return res.status(401).end(FORBIDDEN);
+  }
+  const email = req.query.email;
+  const hash = req.query.hash;
+  const mainPage = 'http//localhost:3000/home';
+
+  isCorrectRequest(email, hash)
+  .then((id) => {
+    if (id) {
+      confirmRegistration(id)
+      .then(() => {
+        res.redirect(mainPage);
+      })
+      .catch(() => {
+        res.status(500).end(DEFAULT_MESSAGE);
+      });
+    } else {
+      res.status(401).end(FORBIDDEN);
+    }
+  })
+  .catch(() => {
+    res.status(500).end(DEFAULT_MESSAGE);
+  });
 });
 
 export default router;

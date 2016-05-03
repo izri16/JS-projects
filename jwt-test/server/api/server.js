@@ -9,10 +9,9 @@ import auth from './auth';
 
 // routes
 import users from './users/routes';
-import mail from './mail/routes';
 
 const env = process.env.NODE_ENV || 'development';
-const port = process.env.NODE_PORT || 8001;
+const port = process.env.NODE_PORT || 3001;
 const app = express();
 
 // headers
@@ -32,7 +31,6 @@ app.set('port', port);
 
 // routes
 app.use('/users', users);
-app.use('/mail', mail);
 
 createServer(app).listen(app.get('port'), () => {
   console.info('Listening on "%s:%s" env="%s"', address(), 

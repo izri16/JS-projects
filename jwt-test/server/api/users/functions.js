@@ -49,3 +49,16 @@ export function getTokenData(userId) {
   }, app.get('jwtTokenSecret'));
   return {token, expires};
 }
+
+export function isCorrectRequest(email, hash) {
+  return db.any('SELECT id FROM users \
+                 WHERE email = $1 AND auth_hash = $2 AND active = false',
+                 [email, hash])
+  .then((data) => data.length ? data[0].id : false)
+  .catch(() => false);
+}
+
+export function confirmRegistration(id) {
+  return db.any('UPDATE users SET active = true \
+                 WHERE id = $1 AND active = false', [id]);
+}
