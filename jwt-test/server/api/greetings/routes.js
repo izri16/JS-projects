@@ -1,20 +1,34 @@
 import express from 'express';
 
 import auth from '../../middleware/auth';
+import { addGreeting } from './functions';
 
 const router = express.Router();
 
-// Get custom greeting
+// Get random greeting
 router.get('/', [auth], (req, res) => {
   if (!req.user) {
-    res.sendStatus(401);
-  } else {
-    res.status(200).json({ok: 'ok'});
+    return res.sendStatus(401);
   }
+  res.status(200).json({ok: 'ok'});
 });
 
+// Add greeting
 router.post('/', [auth], (req, res) => {
-
+  if (!req.body.greeting || (req.body.greeting.trim() === '')) {
+    return res.sendStatus(400);
+  }
+  const greeting = req.body.greeting.trim();
+  addGreeting(req.user, greeting)
+  .then((id) => {
+    if (!id) {
+      return res.sendStatus(500);
+    }
+    return res.sendStatus(200);
+  })
+  .catch(() => {
+    res.sendStatus(500);
+  });
 });
 
 export default router;
