@@ -37,13 +37,13 @@ router.post('/', (req, res) => {
   let response = {
     message: WRONG_CREDS
   };
-  if (!body.password || !body.login) {
+  if (!body.password || !body.email) {
     res.status(401).json(response);
   }
 
   const password = body.password.trim();
-  const login = body.login.trim();
-  getUserHash(login)
+  const email = body.email.trim();
+  getUserHash(email)
     .then((data) => {
       if (data) {
         const { hash, userId } = data;

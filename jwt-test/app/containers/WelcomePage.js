@@ -5,7 +5,7 @@ import { initialize } from 'redux-form';
 
 import Body from '../components/Body';
 
-import { registerUser } from '../actions';
+import { registerUser, loginUser } from '../actions';
 
 class WelcomePage extends Component {
 
@@ -20,12 +20,10 @@ class WelcomePage extends Component {
 
   render() {
     return (
-      <Body handleSubmitRegister={this.handleSubmitRegister.bind(this)}/>
+      <Body handleSubmitRegister={this.handleSubmitRegister.bind(this)} />
     );
   }
 }
-
-
 
 const mapStateToProps = (state) => {
   return {
@@ -36,6 +34,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     registerUser,
+    loginUser,
     dispatch
   }, dispatch);
 };

@@ -11,7 +11,8 @@ import UserActions from './UserActions';
 class Navigation extends Component {
   
   render() {
-    const {isLoggedIn} = this.props;
+    const { authenticated, handleSubmitLogin, logout} = this.props;
+
     return (
       <Navbar style={navigationStyle} inverse>
         <Navbar.Header>
@@ -22,7 +23,8 @@ class Navigation extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            {isLoggedIn && <UserActions /> || <LoginForm />}
+            {authenticated && <UserActions logout={logout} /> || 
+            <LoginForm onSubmit={handleSubmitLogin}/>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

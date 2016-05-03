@@ -40,37 +40,41 @@ const loginError = (message) => {
 };
 
 export const loginUser = (creds) => {
-  
+
   let config = {
     method: 'POST',
     headers: {'Content-type': 'application/x-www-form-urlencoded'},
-    body: `email=${creds.email}&password=${creds.password}&login=${creds.email}`,
+    body: `email=${creds.email}&password=${creds.password}`,
     mode: 'cors'
   };
 
   return dispatch => {
-    // We dispatch requestLogin to kickoff the call to the API
-    dispatch(requestLogin(creds));
+    return new Promise((resolve, reject) => {
+      // We dispatch requestLogin to kickoff the call to the API
+      dispatch(requestLogin(creds));
 
-    return fetch('http://localhost:8001/users/new', config)
-      .then(response =>
-        response.json().then(user => ({ user, response })))
-      .then(({ user, response }) =>  {
-        if (!response.ok) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(loginError(user.message));
-          return Promise.reject(user);
-        } else {
-          // If login was successful, set the token in local storage
-          localStorage.setItem('id_token', user.id_token);
-          // Dispatch the success action
-          dispatch(receiveLogin(user));
-        }
-      }).catch(err => {
-        dispatch(loginError('Error'));
-        console.log('Error: ', err);
-      });
+      return fetch('http://localhost:3001/users', config)
+        .then(response =>
+          response.json().then(data => ({ data, response })))
+        .then(({ data, response }) =>  {
+          if (!response.ok) {
+            // If there was a problem, we want to
+            // dispatch the error condition
+            dispatch(loginError(data.message));
+            reject({_error: data.message});
+          } else {
+            // If login was successful, set the token in local storage
+            localStorage.setItem('id_token', data.token);
+            // Dispatch the success action
+            dispatch(receiveLogin(data));
+            resolve();
+          }
+        }).catch(err => {
+          dispatch(loginError('Error'));
+          console.log('Error: ', err);
+          reject({_error: 'Unexpected error'});
+        });
+    });
   };
 };
 
@@ -132,5 +136,18 @@ export const registerUser = (creds) => {
           reject({_error: ERROR});
         });
     });
+  };
+};
+
+const logoutRequest = () => {
+  return {
+    type: LOGOUT_REQUEST
+  };
+};
+
+export const logout = () => {
+  return dispatch => {
+    dispatch(logoutRequest());
+    localStorage.removeItem('id_token');
   };
 };

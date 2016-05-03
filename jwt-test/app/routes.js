@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import ConfirmRegistration from './components/ConfirmRegistration';
-import App from './components/App';
+import App from './containers/App';
 import Users from './containers/Users';
 import Dashboard from './containers/Dashboard';
 import WelcomePage from './containers/WelcomePage';

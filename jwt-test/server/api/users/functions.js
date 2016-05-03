@@ -23,11 +23,11 @@ export function isUniqueLogin(login) {
     });
 }
 
-export function getUserHash(login) {
+export function getUserHash(email) {
   const query = 'SELECT u.password as hash, u.id \
                  FROM users u \
-                 WHERE u.login=$1 or u.email=$1';
-  return db.any(query, [login])
+                 WHERE u.email=$1';
+  return db.any(query, [email])
     .then((data) => {
       if (data.length) {
         const hash = data[0].hash;

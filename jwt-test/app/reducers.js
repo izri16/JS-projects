@@ -3,7 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
-  LOGOUT_SUCCESS,
+  LOGOUT_REQUEST,
   REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE
 } from './actions';
 
@@ -30,7 +30,7 @@ function auth(state = {
       isAuthenticated: false,
       errorMessage: action.message
     });
-  case LOGOUT_SUCCESS:
+  case LOGOUT_REQUEST:
     return Object.assign({}, state, {
       isAuthenticated: false
     });
