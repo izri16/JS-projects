@@ -56,7 +56,6 @@ export const loginUser = (creds) => {
       .then(response =>
         response.json().then(user => ({ user, response })))
       .then(({ user, response }) =>  {
-        console.log('aaaauto', user, response);
         if (!response.ok) {
           // If there was a problem, we want to
           // dispatch the error condition
@@ -69,7 +68,7 @@ export const loginUser = (creds) => {
           dispatch(receiveLogin(user));
         }
       }).catch(err => {
-        dispatch(loginError('FUCK YOU'));
+        dispatch(loginError('Error'));
         console.log('Error: ', err);
       });
   };
@@ -115,7 +114,7 @@ export const registerUser = (creds) => {
     return new Promise((resolve, reject) => {
       dispatch(registerRequest(creds));
 
-      return fetch('http://localhost:8001/users/new', config)
+      return fetch('http://localhost:3001/users/new', config)
         .then(response =>
           response.json().then(res => ({ res, response })))
         .then(({ res, response }) =>  {

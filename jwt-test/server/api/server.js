@@ -11,7 +11,7 @@ import auth from './auth';
 import users from './users/routes';
 
 const env = process.env.NODE_ENV || 'development';
-const port = process.env.NODE_PORT || 8001;
+const port = process.env.NODE_PORT || 3001;
 const app = express();
 
 // headers
@@ -19,6 +19,8 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   next();
 });
+
+// static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,8 +31,6 @@ app.set('port', port);
 
 // routes
 app.use('/users', users);
-
-
 
 createServer(app).listen(app.get('port'), () => {
   console.info('Listening on "%s:%s" env="%s"', address(), 
