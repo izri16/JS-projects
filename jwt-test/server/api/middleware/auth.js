@@ -1,7 +1,7 @@
 import jwt from 'jwt-simple';
 
-import app from '../api/server';
-import { db } from '../api/db';
+import app from '../server';
+import { db } from '../db';
 
 function auth(req, res, next) {
   req.user = undefined;

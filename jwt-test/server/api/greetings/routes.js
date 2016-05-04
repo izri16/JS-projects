@@ -1,6 +1,6 @@
 import express from 'express';
 
-import auth from '../../middleware/auth';
+import auth from '../middleware/auth';
 import { addGreeting, getRandomGreeting } from './functions';
 
 const router = express.Router();
