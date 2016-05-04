@@ -10,6 +10,14 @@ export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 
+export const GET_GREETING_REQUEST = 'GET_GREETING_REQUEST';
+export const GET_GREETING_SUCCESS = 'GET_GREETING_SUCCESS';
+export const GET_GREETING_ERROR = 'GET_GREETING_ERROR';
+
+export const POST_GREETING_REQUEST = 'POST_GREETING_REQUEST';
+export const POST_GREETING_SUCCESS = 'POST_GREETING_SUCCESS';
+export const POST_GREETING_ERROR = 'POST_GREETING_ERROR';
+
 export const UNEXPECTED_ERROR = 'Unexpected error has occured.';
 
 const requestLogin = (creds) => {
@@ -153,22 +161,45 @@ export const logout = (router) => {
   };
 };
 
-export const getGreetings = () => {
+const getGreetingRequest = () => {
+  return {
+    type: GET_GREETING_REQUEST
+  };
+};
+
+const getGreetingSuccess = (greeting) => {
+  return {
+    type: GET_GREETING_SUCCESS,
+    greeting: greeting
+  };
+};
+
+const getGreetingError = () => {
+  return {
+    type: GET_GREETING_ERROR
+  };
+};
+
+export const getGreeting = () => {
   let config = {
     method: 'GET',
     headers: {'x-access-token': localStorage.getItem('id_token')},
     mode: 'cors'
   };
 
-
   return dispatch => {
+    dispatch(getGreetingRequest());
+
     return fetch('http://localhost:3001/greetings', config)
       .then(response =>
-        response.json().then(res => ({ res, response })))
-      .then(({ res, response }) =>  {
-        console.info('register', res, response);
+        response.json().then(data => ({ data, response })))
+      .then(({ data, response }) =>  {
+        if (!response.ok) {
+          dispatch(getGreetingError(response));
+        }
+        dispatch(getGreetingSuccess(data.greeting));
       }).catch(err => {
-        console.info('register-error', err);
+        dispatch(getGreetingError(err));
       });
   };
 };

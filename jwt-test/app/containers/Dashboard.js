@@ -1,25 +1,50 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import {
+  Row,
+  Col,
+  Grid
+} from 'react-bootstrap';
 
-import { getGreetings } from '../actions';
+import { getGreeting } from '../actions';
+import GreetingForm from '../components/GreetingForm';
+import Greeting from '../components/Greeting';
+
+const dashboardStyle = {
+  marginTop: '20px',
+  paddingBottom: '20px',
+  borderRadius: '5px',
+  background: 'white'
+};
 
 class Dashboard extends Component {
   render() {
-    // if not authenticated redirect
+    const { getGreeting } = this.props;
 
     return (
-      <div>
-      <h2>Welcome to Dashboard</h2>
-      <button onClick={this.props.getGreetings}>click</button>
-      </div>
+      <Grid style={dashboardStyle}>
+        <Row>
+          <Col md={6}>
+            <h1>Get greeting! Give greeting!</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6} style={{marginTop: '25px'}}>
+            <Greeting getGreeting={getGreeting} />
+          </Col>
+          <Col md={6}>
+            <GreetingForm />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
 
 const mapDispathToProps = (dispatch) => {
   return bindActionCreators({
-    getGreetings
+    getGreeting
   }, dispatch);
 };
 

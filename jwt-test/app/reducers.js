@@ -4,7 +4,8 @@ import { reducer as formReducer } from 'redux-form';
 import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
   LOGOUT_REQUEST,
-  REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE
+  REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE,
+  GET_GREETING_REQUEST, GET_GREETING_SUCCESS, GET_GREETING_ERROR
 } from './actions';
 
 function auth(state = {
@@ -55,8 +56,31 @@ function auth(state = {
   }
 }
 
+function greetings(state = {}, action) {
+  switch (action.type) {
+  case GET_GREETING_REQUEST:
+    return Object.assign({}, state, {
+      isFetching: true
+    });
+  case GET_GREETING_SUCCESS:
+    return Object.assign({}, state, {
+      isFetching: false,
+      greeting: action.greeting,
+      errorMessage: ''
+    });
+  case GET_GREETING_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      errorMessage: action.errorMessage
+    });
+  default:
+    return state;
+  }
+}
+
 const loginApp = combineReducers({
   auth,
+  greetings,
   form: formReducer
 });
 
