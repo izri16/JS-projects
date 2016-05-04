@@ -21,6 +21,12 @@ const dashboardStyle = {
 
 class Dashboard extends Component {
 
+  componentWillMount() {
+    if (!this.props.authenticated) {
+      this.context.router.push('/');
+    }
+  }
+
   handleSubmitGreeting(data) {
     console.log('Submission received!', data);
     return this.props.postGreeting(data).then(() => {
@@ -31,6 +37,7 @@ class Dashboard extends Component {
 
   render() {
     const { getGreeting, greeting } = this.props;
+    console.log('auth', this.props.authenticated);
 
     return (
       <Grid style={dashboardStyle}>
@@ -66,8 +73,13 @@ const mapDispathToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     greeting: state.greetings.greeting,
-    submitted: state.greetings.submitted
+    submitted: state.greetings.submitted,
+    authenticated: state.auth.isAuthenticated
   };
+};
+
+Dashboard.contextTypes = {
+  router: React.PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispathToProps)(Dashboard);

@@ -9,6 +9,12 @@ import { registerUser, loginUser } from '../actions';
 
 class WelcomePage extends Component {
 
+  componentWillMount() {
+    if (this.props.authenticated) {
+      this.context.router.push('/dashboard');
+    }
+  }
+
   handleSubmitRegister(data) {
     console.log('Submission received!', data);
     return this.props.registerUser(data).then(() => {
@@ -37,6 +43,10 @@ const mapDispatchToProps = (dispatch) => {
     loginUser,
     dispatch
   }, dispatch);
+};
+
+WelcomePage.contextTypes = {
+  router: React.PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage);
