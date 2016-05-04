@@ -17,6 +17,7 @@ export const GET_GREETING_ERROR = 'GET_GREETING_ERROR';
 export const POST_GREETING_REQUEST = 'POST_GREETING_REQUEST';
 export const POST_GREETING_SUCCESS = 'POST_GREETING_SUCCESS';
 export const POST_GREETING_ERROR = 'POST_GREETING_ERROR';
+export const POST_GREETING_AGAIN = 'POST_GREETING_AGAIN';
 
 export const UNEXPECTED_ERROR = 'Unexpected error has occured.';
 
@@ -203,3 +204,70 @@ export const getGreeting = () => {
       });
   };
 };
+
+const postGreetingRequest = (greeting) => {
+  return {
+    type: POST_GREETING_REQUEST,
+    greeting: greeting
+  };
+};
+
+const postGreetingSuccess = () => {
+  return {
+    type: POST_GREETING_SUCCESS
+  };
+};
+
+const postGreetingError = (errorMessage) => {
+  return {
+    type: POST_GREETING_ERROR,
+    errorMessage
+  };
+};
+
+const postGreetingAgain = () => {
+  return {
+    type: POST_GREETING_AGAIN
+  };
+};
+
+export const acPostGreetingAgain = () => {
+  return dispatch => {
+    dispatch(postGreetingAgain());
+  };
+};
+
+export const postGreeting = (data) => {
+
+  let config = {
+    method: 'POST',
+    headers: {'x-access-token': localStorage.getItem('id_token'),
+              'Content-type': 'application/x-www-form-urlencoded'},
+    body: `greeting=${data.greeting}`,
+    mode: 'cors'
+  };
+  const ERROR = 'Something went wrong.';
+
+  return dispatch => {
+    return new Promise((resolve, reject) => {
+      dispatch(postGreetingRequest(data.greeting));
+
+      return fetch('http://localhost:3001/greetings', config)
+        .then(response => 
+          response.json().then(data => ({ data, response })))
+        .then(({ data, response }) =>  {
+          if (!response.ok) {
+            dispatch(postGreetingError(data.message));
+            reject({_error: data.message});
+          } else {
+            dispatch(postGreetingSuccess());
+            resolve();
+          }
+        }).catch(err => {
+          dispatch(postGreetingError(err));
+          reject({_error: ERROR});
+        });
+    });
+  };
+};
+

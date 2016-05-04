@@ -5,10 +5,7 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  Button,
-  HelpBlock,
-  Row,
-  Col
+  Button
 } from 'react-bootstrap';
 
 class GreetingForm extends Component {
@@ -20,47 +17,43 @@ class GreetingForm extends Component {
   }
 
   render() {
-    const {fields: {greeting}, handleSubmit, error} = this.props;
+    const {fields: {greeting}, handleSubmit, postAgain, error, submitted} = this.props;
 
     return (
-      <Form onSubmit={handleSubmit}>
-        <FormGroup controlId='greeting'>
-          <ControlLabel style={labelStyle}>Greeting</ControlLabel>
+      <div>
+        {!submitted &&
+        <Form onSubmit={handleSubmit}>
+          <FormGroup controlId='greeting'>
+            <ControlLabel style={labelStyle}>Greeting</ControlLabel>
+            {' '}
+            <FormControl
+              componentClass='textarea'
+              placeholder='Type your greeting here ...'
+              {...greeting}/>
+          </FormGroup>
           {' '}
-          <FormControl
-            componentClass='textarea'
-            placeholder='Type your greeting here ...'
-            {...greeting}/>
-        </FormGroup>
-        {' '}
-        <Button onClick={handleSubmit} type='submit' style={buttonStyle}>
-          Add greeting
-        </Button>
-      </Form>
+          <Button onClick={handleSubmit} type='submit' style={buttonStyle}>
+            Add greeting
+          </Button>
+          {
+            error && <h3>{error}</h3>
+          }
+        </Form>
+        ||
+        <Button onClick={postAgain}>Want submit again?</Button>
+       }
+     </div>
     );
   }
 }
-
-const formStyle = {
-  marginTop: '10px'
-};
 
 const labelStyle = {
   color: '#BBBBBB'
 };
 
-const inputStyle = {
-  height: '30px'
-};
-
 const buttonStyle = {
   height: '30px',
   lineHeight: '1em'
-};
-
-const errorStyle = {
-  color: '#BE3131',
-  textAlign: 'right'
 };
 
 GreetingForm.PropTypes = {

@@ -10,8 +10,11 @@ const Greeting = (props) => {
   return (
     <div>
       <Panel>
-        <strong>Click</strong> the <strong>button </strong> down
-        and get yout <strong>greeting for today</strong>!
+        {
+          props.greeting ||
+         (<span><strong>Click</strong> the <strong>button </strong> down
+          and get yout <strong>greeting for today</strong>!</span>)
+        }
       </Panel>
       <CustomButton onClick={props.getGreeting}>Get greeting</CustomButton>
     </div>

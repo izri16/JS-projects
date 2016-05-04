@@ -29,9 +29,10 @@ router.get('/', [auth], (req, res) => {
 // Add greeting
 router.post('/', [auth], (req, res) => {
   if (!req.body.greeting || (req.body.greeting.trim() === '')) {
-    return res.sendStatus(400);
+    return res.status(400).json({message: 'Greeting cant\' t be empty'});
   }
   const greeting = req.body.greeting.trim();
+
   addGreeting(req.user, greeting)
   .then((id) => {
     if (!id) {

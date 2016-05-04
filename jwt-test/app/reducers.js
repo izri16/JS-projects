@@ -5,7 +5,8 @@ import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
   LOGOUT_REQUEST,
   REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE,
-  GET_GREETING_REQUEST, GET_GREETING_SUCCESS, GET_GREETING_ERROR
+  GET_GREETING_REQUEST, GET_GREETING_SUCCESS, GET_GREETING_ERROR,
+  POST_GREETING_REQUEST, POST_GREETING_SUCCESS, POST_GREETING_ERROR, POST_GREETING_AGAIN
 } from './actions';
 
 function auth(state = {
@@ -72,6 +73,25 @@ function greetings(state = {}, action) {
     return Object.assign({}, state, {
       isFetching: false,
       errorMessage: action.errorMessage
+    });
+  case POST_GREETING_REQUEST:
+    return Object.assign({}, state, {
+      isFetching: true,
+      postGreeting: action.greeting
+    });
+  case POST_GREETING_SUCCESS:
+    return Object.assign({}, state, {
+      isFetching: false,
+      submitted: true
+    });
+  case POST_GREETING_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      errorMessage: action.error
+    });
+  case POST_GREETING_AGAIN:
+    return Object.assign({}, state, {
+      submitted: false
     });
   default:
     return state;

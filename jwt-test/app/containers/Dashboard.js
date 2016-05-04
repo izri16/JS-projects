@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { initialize } from 'redux-form';
 import {
   Row,
   Col,
   Grid
 } from 'react-bootstrap';
 
-import { getGreeting } from '../actions';
+import { getGreeting, postGreeting, acPostGreetingAgain } from '../actions';
 import GreetingForm from '../components/GreetingForm';
 import Greeting from '../components/Greeting';
 
@@ -19,8 +20,17 @@ const dashboardStyle = {
 };
 
 class Dashboard extends Component {
+
+  handleSubmitGreeting(data) {
+    console.log('Submission received!', data);
+    return this.props.postGreeting(data).then(() => {
+      this.props.dispatch(initialize('greeting',
+      {}, ['greeting']));
+    });
+  }
+
   render() {
-    const { getGreeting } = this.props;
+    const { getGreeting, greeting } = this.props;
 
     return (
       <Grid style={dashboardStyle}>
@@ -31,10 +41,12 @@ class Dashboard extends Component {
         </Row>
         <Row>
           <Col md={6} style={{marginTop: '25px'}}>
-            <Greeting getGreeting={getGreeting} />
+            <Greeting getGreeting={getGreeting} greeting={greeting}/>
           </Col>
           <Col md={6}>
-            <GreetingForm />
+            <GreetingForm submitted={this.props.submitted}
+                          onSubmit={this.handleSubmitGreeting.bind(this)}
+                          postAgain={this.props.postGreetingAgain} />
           </Col>
         </Row>
       </Grid>
@@ -44,8 +56,18 @@ class Dashboard extends Component {
 
 const mapDispathToProps = (dispatch) => {
   return bindActionCreators({
-    getGreeting
+    getGreeting,
+    postGreeting,
+    postGreetingAgain: acPostGreetingAgain,
+    dispatch
   }, dispatch);
 };
 
-export default connect(null, mapDispathToProps)(Dashboard);
+const mapStateToProps = (state) => {
+  return {
+    greeting: state.greetings.greeting,
+    submitted: state.greetings.submitted
+  };
+};
+
+export default connect(mapStateToProps, mapDispathToProps)(Dashboard);

@@ -7,6 +7,8 @@ function auth(req, res, next) {
   req.user = undefined;
   const token = req.headers['x-access-token'];
 
+  console.log('body', req.body);
+
   if (token) {
     try {
       const decoded = jwt.decode(token, app.get('jwtTokenSecret'));
