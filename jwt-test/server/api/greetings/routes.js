@@ -7,11 +7,8 @@ const router = express.Router();
 
 // Get random greeting
 router.get('/', [auth], (req, res) => {
-  if (!req.user) {
-    return res.sendStatus(401);
-  }
   let ret = {
-    greeting: 'No greeting available. Add some to fill our database!'
+    greeting: 'No greetings available. Add some to fill our database!'
   };
 
   getRandomGreeting()
@@ -22,7 +19,7 @@ router.get('/', [auth], (req, res) => {
     return res.status(200).json(ret);
   })
   .catch(() => {
-    return res.sendStatus(500);
+    return res.status(500).json({});
   });
 });
 
@@ -36,12 +33,12 @@ router.post('/', [auth], (req, res) => {
   addGreeting(req.user, greeting)
   .then((id) => {
     if (!id) {
-      return res.sendStatus(500);
+      return res.status(500).json({});
     }
-    return res.sendStatus(200);
+    return res.status(200).json({});
   })
   .catch(() => {
-    res.sendStatus(500);
+    res.status(500).json({});
   });
 });
 

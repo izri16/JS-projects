@@ -257,6 +257,7 @@ export const postGreeting = (data) => {
           response.json().then(data => ({ data, response })))
         .then(({ data, response }) =>  {
           if (!response.ok) {
+            console.log('fffff', response);
             dispatch(postGreetingError(data.message));
             reject({_error: data.message});
           } else {
@@ -264,6 +265,7 @@ export const postGreeting = (data) => {
             resolve();
           }
         }).catch(err => {
+          console.log('rererererere', err);
           dispatch(postGreetingError(err));
           reject({_error: ERROR});
         });

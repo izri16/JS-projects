@@ -32,15 +32,15 @@ class GreetingForm extends Component {
               {...greeting}/>
           </FormGroup>
           {' '}
-          <Button onClick={handleSubmit} type='submit' style={buttonStyle}>
+          {
+            error && <h4 style={errorStyle}>{error}</h4>
+          }
+          <Button onClick={handleSubmit} type='submit'>
             Add greeting
           </Button>
-          {
-            error && <h3>{error}</h3>
-          }
         </Form>
         ||
-        <Button onClick={postAgain}>Want submit again?</Button>
+        <Button onClick={postAgain} style={againStyle}>Want submit again?</Button>
        }
      </div>
     );
@@ -51,9 +51,12 @@ const labelStyle = {
   color: '#BBBBBB'
 };
 
-const buttonStyle = {
-  height: '30px',
-  lineHeight: '1em'
+const errorStyle = {
+  color: '#BE3131'
+};
+
+const againStyle = {
+  marginTop: '35px'
 };
 
 GreetingForm.PropTypes = {
