@@ -8,7 +8,6 @@ import {
 } from 'react-bootstrap';
 
 import RegisterForm from './RegisterForm';
-import CustomButton from './CustomButton';
 
 class Body extends Component {
 
@@ -21,22 +20,21 @@ class Body extends Component {
             <Col md={8}>
               <Jumbotron style={jumbotronStyle}>
                 <h1>Welcome!</h1>
-                <p>This is a sample text. Wait to see something meaningful.</p>
-                <p><CustomButton>Show more</CustomButton></p>
+                <p>We are looking forward for your greetings.</p>
               </Jumbotron>
               <Col md={4}>
                 <Panel header={panelOneTitle} bsStyle='default'>
-                  Panel content
+                  Get greetings
                 </Panel>
               </Col>
               <Col md={4}>
                 <Panel header={panelOneTitle} bsStyle='default'>
-                  Panel content
+                  Give greetings
                 </Panel>
               </Col>
               <Col md={4}>
                 <Panel header={panelOneTitle} bsStyle='default'>
-                  Panel content
+                  Get more greetings
                 </Panel>
               </Col>
             </Col>
@@ -54,7 +52,7 @@ class Body extends Component {
 }
 
 const panelOneTitle = (
-  <h3>Panel title</h3>
+  <h3>Greetings are good</h3>
 );
 
 const formStyle = {

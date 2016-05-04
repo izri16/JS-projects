@@ -11,18 +11,20 @@ import UserActions from './UserActions';
 class Navigation extends Component {
   
   render() {
-    const {isLoggedIn} = this.props;
+    const { authenticated, handleSubmitLogin, logout} = this.props;
+
     return (
       <Navbar style={navigationStyle} inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/home'}>Musictor</Link>
+            <Link to={'/'}>Greetingtor</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            {isLoggedIn && <UserActions /> || <LoginForm />}
+            {authenticated && <UserActions logout={logout} /> || 
+            <LoginForm onSubmit={handleSubmitLogin}/>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -34,6 +36,5 @@ const navigationStyle = {
   borderRadius: 0,
   margin: 0
 };
-
 
 export default Navigation;

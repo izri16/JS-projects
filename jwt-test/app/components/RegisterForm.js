@@ -23,15 +23,18 @@ class RegisterForm extends Component {
   }
 
   render() {
-    const {fields: {login, email, password, passwordCheck}, handleSubmit} = this.props;
+    const {fields: {login, email, password, passwordCheck}, handleSubmit, error} = this.props;
     const SUCCESS = 'success';
     const ERROR = 'error';
 
     return (
       <Form onSubmit={handleSubmit}>
+        {
+          error && <h3 style={errorStyle}>{error}</h3>
+        }
         <FormGroup
           controlId='registerLogin'
-          validationState={login.error.message && login.touched && ERROR || 
+          validationState={login.error.message && login.touched && ERROR ||
                           !login.error.message && (login.active || login.touched) && SUCCESS}
           >
           <ControlLabel>Login</ControlLabel>
@@ -47,7 +50,8 @@ class RegisterForm extends Component {
         </FormGroup>
         <FormGroup
           controlId='registerEmail'
-          validationState={email.error.message && email.touched && ERROR || 
+          validationState={email.error.message && email.touched && ERROR ||
+                          email.submitError && ERROR ||
                           !email.error.message && (email.active || email.touched) && SUCCESS}
           >
           <ControlLabel>Email</ControlLabel>
@@ -94,11 +98,15 @@ class RegisterForm extends Component {
           }
           <FormControl.Feedback />
         </FormGroup>
-        <CustomButton onSubmit={handleSubmit} type='submit'>Register</CustomButton>
+        <CustomButton type='submit' onSubmit={handleSubmit}>Register</CustomButton>
       </Form>
     );
   }
 }
+
+const errorStyle = {
+  color: '#CE2323'
+};
 
 RegisterForm.PropTypes = {
   handleSubmit: PropTypes.func.isRequired

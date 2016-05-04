@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { initialize } from 'redux-form';
 
-import Body from '../components/Body';
 import Navigation from '../components/Navigation';
+import { loginUser, logout } from '../actions';
 
 class App extends Component {
 
-  handleSubmitRegister(data) {
-    console.log('Submission received!', data);
-    this.props.dispatch(initialize('register',
-      {}, ['login', 'email', 'password', 'passwordCheck'])); // clear form
+  handleSubmitLogin(data) {
+    return this.props.loginUser(data).then(() => {
+      this.props.dispatch(initialize('login',
+      {}, ['email', 'password']));
+      this.props.history.push('/dashboard');
+    });
   }
 
   render() {
     return (
       <div>
-        <Navigation />
-        <Body handleSubmitRegister={this.handleSubmitRegister.bind(this)}/>
+        <Navigation
+          handleSubmitLogin={this.handleSubmitLogin.bind(this)}
+          authenticated={this.props.authenticated}
+          logout={() => this.props.logout(this.context.router)} />
+        {this.props.children}
       </div>
     );
   }
@@ -25,8 +31,21 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    authenticated: state.isAuthenticated
+    authenticated: state.auth.isAuthenticated
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    loginUser,
+    logout,
+    dispatch
+  }, dispatch);
+};
+
+App.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+

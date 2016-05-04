@@ -1,0 +1,5 @@
+// nodemon sometimes fails to watch because 'max_user_watches' is set too low
+echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+// to kill already running nodejs server list used ports with and then kill it
+sudo netstat -lptu
