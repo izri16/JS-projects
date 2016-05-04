@@ -23,16 +23,16 @@ export function isUniqueLogin(login) {
     });
 }
 
-export function getUserHash(login) {
+export function getUserHash(email) {
   const query = 'SELECT u.password as hash, u.id \
                  FROM users u \
-                 WHERE u.login=$1 or u.email=$1';
-  return db.any(query, [login])
+                 WHERE u.email=$1';
+  return db.any(query, [email])
     .then((data) => {
       if (data.length) {
         const hash = data[0].hash;
         const id = data[0].id;
-        return {hash, id};
+        return {hash, userId: id};
       }
       return undefined;
     })
@@ -42,6 +42,7 @@ export function getUserHash(login) {
 }
 
 export function getTokenData(userId) {
+  console.log('userId', userId);
   const expires = moment().add(7, 'days').valueOf();
   const token = jwt.encode({
     iss: userId,

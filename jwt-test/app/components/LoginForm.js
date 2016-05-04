@@ -1,33 +1,67 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { reduxForm, initialize } from 'redux-form';
 import {
   Form,
   FormGroup,
   FormControl,
   ControlLabel,
-  Button
+  Button,
+  HelpBlock,
+  Row,
+  Col
 } from 'react-bootstrap';
 
-class Login extends Component {
+class LoginForm extends Component {
+
+  componentWillMount() {
+    this.props.dispatch(initialize('login', {
+      email: '',
+      password: ''
+    }, ['email', 'password']));
+  }
 
   render() {
+    const {fields: {email, password}, handleSubmit, error} = this.props;
+
     return (
-      <Form style={formStyle} inline>
+      <div>
+      <Row>
+      <Form onSubmit={handleSubmit} style={formStyle} inline>
         <FormGroup controlId='emailLogin'>
           <ControlLabel style={labelStyle}>Email</ControlLabel>
           {' '}
-          <FormControl type='email' placeholder='Email' style={inputStyle}/>
+          <FormControl
+            type='email'
+            placeholder='Email'
+            style={inputStyle}
+            {...email}/>
         </FormGroup>
         {' '}
         <FormGroup controlId='passwordLogin'>
           <ControlLabel style={labelStyle}>Password</ControlLabel>
           {' '}
-          <FormControl type='password' placeholder='Password' style={inputStyle}/>
+          <FormControl
+            type='password'
+            placeholder='Password'
+            style={inputStyle}
+            {...password}/>
         </FormGroup>
         {' '}
-        <Button type='submit' style={buttonStyle}>
+        <Button onClick={handleSubmit} type='submit' style={buttonStyle}>
           Login
         </Button>
       </Form>
+      </Row>
+      <Row>
+        <Col md={6}>
+        </Col>
+        <Col md={6}>
+        {
+          error && <HelpBlock style={errorStyle}>{error}</HelpBlock>
+        }
+        </Col>
+      </Row>
+      </div>
     );
   }
 }
@@ -49,5 +83,17 @@ const buttonStyle = {
   lineHeight: '1em'
 };
 
+const errorStyle = {
+  color: '#BE3131',
+  textAlign: 'right'
+};
 
-export default Login;
+LoginForm.PropTypes = {
+  handleSubmit: PropTypes.func.isRequired
+};
+
+// decorator
+export default LoginForm = reduxForm({
+  form: 'login',                           // a unique name for this form
+  fields: ['email', 'password']            // all the fields in your form
+})(LoginForm);

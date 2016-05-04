@@ -22,7 +22,7 @@ const authString = 'smtps://publicmailer123%40gmail.com:tajneheslo123@smtp.gmail
 const smtpTransport = nodemailer.createTransport(authString);
 
 const CREATE_USER_ERROR = 'Could not create user';
-const WRONG_CREDS = 'Wrong login or password';
+const WRONG_CREDS = 'Wrong login or password!';
 const router = express.Router();
 
 // Token check may come here
@@ -37,13 +37,13 @@ router.post('/', (req, res) => {
   let response = {
     message: WRONG_CREDS
   };
-  if (!body.password || !body.login) {
+  if (!body.password || !body.email) {
     res.status(401).json(response);
   }
 
   const password = body.password.trim();
-  const login = body.login.trim();
-  getUserHash(login)
+  const email = body.email.trim();
+  getUserHash(email)
     .then((data) => {
       if (data) {
         const { hash, userId } = data;
@@ -122,7 +122,6 @@ router.post('/new', (req, res) => {
         return res.status(500).json(response);
       }
       const urlHash = createRandomHash();
-      console.log('hash', urlHash);
       var query = 'INSERT INTO users(login, email, password, auth_hash)\
                    VALUES($1, $2, $3, $4) RETURNING id';
       db.one(query, [login, email, hash, urlHash])
