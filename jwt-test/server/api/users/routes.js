@@ -122,7 +122,6 @@ router.post('/new', (req, res) => {
         return res.status(500).json(response);
       }
       const urlHash = createRandomHash();
-      console.log('hash', urlHash);
       var query = 'INSERT INTO users(login, email, password, auth_hash)\
                    VALUES($1, $2, $3, $4) RETURNING id';
       db.one(query, [login, email, hash, urlHash])

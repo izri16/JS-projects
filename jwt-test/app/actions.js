@@ -78,9 +78,8 @@ export const loginUser = (creds) => {
             dispatch(receiveLogin(data));
             resolve();
           }
-        }).catch(err => {
+        }).catch(() => {
           dispatch(loginError('Error'));
-          console.log('Error: ', err);
           reject({_error: 'Unexpected error'});
         });
     });
@@ -131,7 +130,6 @@ export const registerUser = (creds) => {
         .then(response =>
           response.json().then(res => ({ res, response })))
         .then(({ res, response }) =>  {
-          console.info('register', res, response);
           if (!response.ok) {
             dispatch(registerError(res.message, res.errorFields));
             reject({_error: res.message});
@@ -139,8 +137,7 @@ export const registerUser = (creds) => {
             dispatch(registerSuccess(res));
             resolve();
           }
-        }).catch(err => {
-          console.info('register-error', err);
+        }).catch(() => {
           dispatch(registerError(UNEXPECTED_ERROR));
           reject({_error: ERROR});
         });
@@ -243,7 +240,7 @@ export const postGreeting = (data) => {
     method: 'POST',
     headers: {'x-access-token': localStorage.getItem('id_token'),
               'Content-type': 'application/x-www-form-urlencoded'},
-    body: `greeting=${data.greeting}`,
+    body: `greeting=${data.greeting ? data.greeting : ''}`,
     mode: 'cors'
   };
   const ERROR = 'Something went wrong.';
@@ -257,7 +254,6 @@ export const postGreeting = (data) => {
           response.json().then(data => ({ data, response })))
         .then(({ data, response }) =>  {
           if (!response.ok) {
-            console.log('fffff', response);
             dispatch(postGreetingError(data.message));
             reject({_error: data.message});
           } else {
@@ -265,7 +261,6 @@ export const postGreeting = (data) => {
             resolve();
           }
         }).catch(err => {
-          console.log('rererererere', err);
           dispatch(postGreetingError(err));
           reject({_error: ERROR});
         });

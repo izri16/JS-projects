@@ -9,7 +9,6 @@ import { loginUser, logout } from '../actions';
 class App extends Component {
 
   handleSubmitLogin(data) {
-    console.log('Submission received!', data);
     return this.props.loginUser(data).then(() => {
       this.props.dispatch(initialize('login',
       {}, ['email', 'password']));
@@ -18,14 +17,12 @@ class App extends Component {
   }
 
   render() {
-    console.log('token', localStorage.getItem('id_token'));
-
     return (
       <div>
         <Navigation
           handleSubmitLogin={this.handleSubmitLogin.bind(this)}
           authenticated={this.props.authenticated}
-          logout={() => this.props.logout(this.props.history)} />
+          logout={() => this.props.logout(this.context.router)} />
         {this.props.children}
       </div>
     );
@@ -44,6 +41,10 @@ const mapDispatchToProps = (dispatch) => {
     logout,
     dispatch
   }, dispatch);
+};
+
+App.contextTypes = {
+  router: React.PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

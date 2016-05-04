@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {
   Navbar,
-  Nav,
-  NavItem
+  Nav
 } from 'react-bootstrap';
 import { Link } from 'react-router';
 
@@ -18,17 +17,11 @@ class Navigation extends Component {
       <Navbar style={navigationStyle} inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/'}>Musictor</Link>
+            <Link to={'/'}>Greetingtor</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          { 
-          !authenticated && 
-          <Nav style={forgotPasswordWrapper}>
-            <Link style={forgotPasswordStyle} to={'/forgot-passwod'}>Forgot password</Link>
-          </Nav>
-          }
           <Nav pullRight>
             {authenticated && <UserActions logout={logout} /> || 
             <LoginForm onSubmit={handleSubmitLogin}/>}
@@ -43,16 +36,5 @@ const navigationStyle = {
   borderRadius: 0,
   margin: 0
 };
-
-const forgotPasswordStyle = {
-  textDecoration: 'none',
-  color: '#9d9d9d'
-};
-
-const forgotPasswordWrapper = {
-  marginTop: '15px',
-  marginLeft: '10px'
-};
-
 
 export default Navigation;

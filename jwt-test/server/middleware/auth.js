@@ -7,8 +7,6 @@ function auth(req, res, next) {
   req.user = undefined;
   const token = req.headers['x-access-token'];
 
-  console.log('body', req.body);
-
   if (token) {
     try {
       const decoded = jwt.decode(token, app.get('jwtTokenSecret'));
@@ -22,17 +20,19 @@ function auth(req, res, next) {
       .then((status) => {
         if (status) {
           req.user = id;
+          next();
+        } else {
+          res.status(401).json({});
         }
-        next();
       })
       .catch(() => {
-        next();
+        res.status(500).json({});
       });
     } catch (err) {
-      return next();
+      res.status(500).json({});
     }
   } else {
-    next();
+    res.status(401).json({});
   }
 }
 
