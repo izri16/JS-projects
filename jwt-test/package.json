@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "eslint": "eslint .",
+    "lint": "./node_modules/.bin/eslint .",
     "dev": "webpack-dev-server --progress",
     "clear-dist": "rm -r public/dist/* || true",
     "build": "npm run clear-dist && NODE_ENV=production webpack --config ./webpack.production.config.js --progress",

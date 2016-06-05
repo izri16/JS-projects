@@ -24,7 +24,8 @@
   "scripts": {
     "dev": "nodemon --exec babel-node api/server.js",
     "build": "babel api --out-dir dist",
-    "start": "npm run build && node dist/server.js"
+    "start": "npm run build && node dist/server.js",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "author": "",
   "license": "ISC"
