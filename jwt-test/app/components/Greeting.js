@@ -6,7 +6,6 @@ import {
 import CustomButton from './CustomButton';
 
 const Greeting = (props) => {
-  console.log('props', props.getGreeting);
   return (
     <div>
       <Panel>

@@ -38,7 +38,8 @@ class RegisterForm extends Component {
         <FormGroup
           controlId='registerLogin'
           validationState={login.error.message && login.touched && ERROR ||
-                          !login.error.message && (login.active || login.touched) && SUCCESS}
+                          !login.error.message &&
+                          (login.active || login.touched) && SUCCESS}
           >
           <ControlLabel>Login</ControlLabel>
           <FormControl
@@ -55,7 +56,9 @@ class RegisterForm extends Component {
           controlId='registerEmail'
           validationState={email.error.message && email.touched && ERROR ||
                           email.submitError && ERROR ||
-                          !email.error.message && (email.active || email.touched) && SUCCESS}
+                          !email.error.message &&
+                          (email.active || email.touched) &&
+                          SUCCESS}
           >
           <ControlLabel>Email</ControlLabel>
           <FormControl
@@ -70,8 +73,11 @@ class RegisterForm extends Component {
         </FormGroup>
         <FormGroup
           controlId='registerPassword'
-          validationState={password.error.message && password.touched && ERROR || 
-                          !password.error.message && (password.active || password.touched) && SUCCESS}
+          validationState={password.error.message &&
+                           password.touched && ERROR || 
+                          !password.error.message &&
+                          (password.active || password.touched) &&
+                          SUCCESS}
           >
           <ControlLabel>Password</ControlLabel>
           <FormControl
@@ -86,9 +92,11 @@ class RegisterForm extends Component {
         </FormGroup>
         <FormGroup
           controlId='registerPasswordCheck'
-          validationState={passwordCheck.error.message && passwordCheck.touched && ERROR || 
+          validationState={passwordCheck.error.message &&
+                           passwordCheck.touched && ERROR ||
                           !passwordCheck.error.message &&
-                          (passwordCheck.active || passwordCheck.touched) && SUCCESS}
+                          (passwordCheck.active || passwordCheck.touched) &&
+                          SUCCESS}
           >
           <ControlLabel>Password confirm</ControlLabel>
           <FormControl
@@ -96,12 +104,18 @@ class RegisterForm extends Component {
             placeholder='Confirm password'
             {...passwordCheck}
           />
-          {passwordCheck.error.message && password.touched && passwordCheck.touched &&
+          {passwordCheck.error.message && password.touched &&
+            passwordCheck.touched &&
             <HelpBlock>{passwordCheck.error.message}</HelpBlock>
           }
           <FormControl.Feedback />
         </FormGroup>
-        <CustomButton type='submit' disabled={submitting} onSubmit={handleSubmit}>Register</CustomButton>
+        <CustomButton
+          type='submit'
+          disabled={submitting}
+          onSubmit={handleSubmit}>
+            Register
+          </CustomButton>
       </Form>
     );
   }
@@ -117,7 +131,7 @@ RegisterForm.PropTypes = {
 
 // decorator
 export default RegisterForm = reduxForm({
-  form: 'register',                           // a unique name for this form
-  fields: ['login', 'email', 'password', 'passwordCheck'], // all the fields in your form
+  form: 'register',
+  fields: ['login', 'email', 'password', 'passwordCheck'],
   validate: validateRegisterForm
 })(RegisterForm);
