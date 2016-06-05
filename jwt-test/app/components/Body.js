@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Grid,
   Row,
@@ -9,47 +9,41 @@ import {
 
 import RegisterForm from './RegisterForm';
 
-class Body extends Component {
+const Body = ({ handleSubmitRegister, children }) => {
+  return (
+    <Grid fluid={true} style={containerStyle}>
+      <Row>
+        <Col md={8}>
+          <Jumbotron style={jumbotronStyle}>
+            <h1>Welcome!</h1>
+            <p>We are looking forward for your greetings.</p>
+          </Jumbotron>
+          <Col md={4}>
+            <Panel header={panelOneTitle} bsStyle='default'>
+              Get greetings
+            </Panel>
+          </Col>
+          <Col md={4}>
+            <Panel header={panelOneTitle} bsStyle='default'>
+              Give greetings
+            </Panel>
+          </Col>
+          <Col md={4}>
+            <Panel header={panelOneTitle} bsStyle='default'>
+              Get more greetings
+            </Panel>
+          </Col>
+        </Col>
+        <Col md={4} style={formStyle}>
+          <h2>Don't have accout yet?</h2>
+          <RegisterForm onSubmit={handleSubmitRegister} />
+        </Col>
+      </Row>
+      {children}
+    </Grid>
+  );
+};
 
-  render() {
-    const { handleSubmitRegister } = this.props;
-
-    return (
-        <Grid fluid={true} style={containerStyle}>
-          <Row>
-            <Col md={8}>
-              <Jumbotron style={jumbotronStyle}>
-                <h1>Welcome!</h1>
-                <p>We are looking forward for your greetings.</p>
-              </Jumbotron>
-              <Col md={4}>
-                <Panel header={panelOneTitle} bsStyle='default'>
-                  Get greetings
-                </Panel>
-              </Col>
-              <Col md={4}>
-                <Panel header={panelOneTitle} bsStyle='default'>
-                  Give greetings
-                </Panel>
-              </Col>
-              <Col md={4}>
-                <Panel header={panelOneTitle} bsStyle='default'>
-                  Get more greetings
-                </Panel>
-              </Col>
-            </Col>
-            <Col md={4} style={formStyle}>
-              <h2>Don't have accout yet?</h2>
-              <RegisterForm onSubmit={handleSubmitRegister} />
-            </Col>
-          </Row>
-
-          {this.props.children}
-
-        </Grid>
-    );
-  }
-}
 
 const panelOneTitle = (
   <h3>Greetings are good</h3>

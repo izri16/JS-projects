@@ -154,9 +154,9 @@ router.post('/new', (req, res) => {
     const link = `http://${host}/users/verify?email=${email}&hash=${urlHash}`;
 
     const mailOptions={
-      from: 'Musictor',
+      from: 'Greetingtor',
       to: email,
-      subject: 'Musictor registration',
+      subject: 'Greetingtor registration',
       html : 'Thank you for registration <strong>' + login + '</strong>!<br> \
               Please Click on the link bellow to verify your email.<br>\
               <a href='+link+'>Click here to verify</a>'

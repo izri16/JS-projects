@@ -31,7 +31,8 @@ function validateRegisterForm(data) {
 
   if (!data.passwordCheck) {
     errors.passwordCheck.message = NOT_EMPTY;
-  } else if (data.password && data.password.trim() !== data.passwordCheck.trim()) {
+  } else if (data.password &&
+             data.password.trim() !== data.passwordCheck.trim()) {
     errors.passwordCheck.message = 'Passwords do not match';
   }
 
