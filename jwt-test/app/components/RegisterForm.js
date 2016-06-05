@@ -23,7 +23,10 @@ class RegisterForm extends Component {
   }
 
   render() {
-    const {fields: {login, email, password, passwordCheck}, handleSubmit, error} = this.props;
+    const {
+      fields: {login, email, password, passwordCheck},
+      handleSubmit, error, submitting
+    } = this.props;
     const SUCCESS = 'success';
     const ERROR = 'error';
 
@@ -98,7 +101,7 @@ class RegisterForm extends Component {
           }
           <FormControl.Feedback />
         </FormGroup>
-        <CustomButton type='submit' onSubmit={handleSubmit}>Register</CustomButton>
+        <CustomButton type='submit' disabled={submitting} onSubmit={handleSubmit}>Register</CustomButton>
       </Form>
     );
   }
