@@ -17,7 +17,7 @@ class GreetingForm extends Component {
   }
 
   render() {
-    const {fields: {greeting}, handleSubmit, postAgain, error, submitted} = this.props;
+    const {fields: {greeting}, handleSubmit, postAgain, error, submitted, submitting} = this.props;
 
     return (
       <div>
@@ -35,7 +35,7 @@ class GreetingForm extends Component {
           {
             error && <h4 style={errorStyle}>{error}</h4>
           }
-          <Button onClick={handleSubmit} type='submit'>
+          <Button onClick={handleSubmit} type='submit' disabled={submitting}>
             Add greeting
           </Button>
         </Form>

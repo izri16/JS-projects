@@ -26,7 +26,7 @@ export function isUniqueLogin(login) {
 export function getUserHash(email) {
   const query = 'SELECT u.password as hash, u.id \
                  FROM users u \
-                 WHERE u.email=$1';
+                 WHERE u.email=$1 and u.active = true';
   return db.any(query, [email])
     .then((data) => {
       if (data.length) {
