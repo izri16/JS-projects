@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import { createServer } from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import address from 'network-address';
 import path from 'path';
+
+dotenv.config();
 
 // routes
 import users from './users/routes';

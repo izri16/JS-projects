@@ -8,7 +8,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'dist/[name]-[hash].js',
-    hash: true
+    hash: true,
+    publicPath: '/'
   },
   module: {
     loaders: [

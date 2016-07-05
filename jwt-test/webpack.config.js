@@ -12,10 +12,17 @@ module.exports = {
   ],
   devtool: 'eval-source-map',
   watch: true,
-  entry: './app/index.js',
+  entry: {
+    app: [
+      'webpack-dev-server/client?http://localhost:3000/',
+      'webpack/hot/dev-server',
+      './app/index.js'
+    ]
+  },
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: '[name]-[hash].js'
+    filename: '[name]-[hash].js',
+    publicPath: '/'
   },
   module: {
     loaders: [
